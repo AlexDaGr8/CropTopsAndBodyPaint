@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 80vw;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 70% 30%;
+            gap: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="file" id="file-input" />
+    </div>
+    <div class="container">
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <img src="#" alt="your image" id="img-cropped" width="100%" />
+    </div>
+    <script type="module">
+        import Canvas from './canvas.js';
+
+        let fileInput = document.getElementById('file-input');
+        fileInput.onchange = function(e) {
+            readURL(this);
+        }
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    let canvas = new Canvas('canvas', 'img-cropped');
+                    canvas.imgSrc = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        let testImg = document.getElementById('img-cropped');
+        testImg.onclick = () => {
+            var link = document.createElement('a');
+            link.href = testImg.src;
+            link.download = 'test.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
